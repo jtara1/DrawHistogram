@@ -2,6 +2,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import random
+import json
+import logging
+
+log = getLogger("")
+
+py_version = sys.version_info[0]
+FileNotFoundError = IOError if py_version==2 else FileNotFoundError
+
+
+class WrongDataTypeError(Exception):
+    """Raised when data type is invalid or not expected type"""
+    def __init__(message):
+        self.message = message
+
+
+def load_data(filename):
+    try:
+        data = json.loads(open(filename, 'r'))
+    except FileNotFoundError:
+        print("%s does not exist." % filename)
+    if not isinstance(list, data):
+        raise WrongDataTypeError("Data from %s is not a %s." % (filename, "list"))
+    return data
 
 
 def draw_histogram(data, output_filename='histogram'):
