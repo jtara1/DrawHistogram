@@ -2,13 +2,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import random
+import sys
 import json
-import logging
-
-log = getLogger("")
+try:
+    from json.decoder import JSONDecodeError
+except:
+    JSONDecodeError = ValueError
 
 py_version = sys.version_info[0]
 FileNotFoundError = IOError if py_version==2 else FileNotFoundError
+
 
 
 class WrongDataTypeError(Exception):
@@ -19,10 +22,12 @@ class WrongDataTypeError(Exception):
 
 def load_data(filename):
     try:
-        data = json.loads(open(filename, 'r'))
-    except FileNotFoundError:
-        print("%s does not exist." % filename)
-    if not isinstance(list, data):
+        data = json.loads(open(filename, 'r').read())
+    except (FileNotFoundError, IOError):
+        raise
+    except (JSONDecodeError, ValueError):
+        raise
+    if not isinstance(data, list):
         raise WrongDataTypeError("Data from %s is not a %s." % (filename, "list"))
     return data
 
@@ -43,4 +48,7 @@ if __name__ == "__main__":
     # tests
     g_numbs = np.random.randn(1000)
     sample_data = [random.randint(0, 10) for i in range(1000)]
+    data_filename = "example.data.txt"
+    data = load_data("mumbo.txt")
+    print(data)
     draw_histogram(sample_data, 'myhisto')
