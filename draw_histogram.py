@@ -6,7 +6,7 @@ import sys
 import json
 try:
     from json.decoder import JSONDecodeError
-except:
+except ImportError:
     JSONDecodeError = ValueError
 
 py_version = sys.version_info[0]
