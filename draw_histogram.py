@@ -3,6 +3,7 @@ import numpy as np
 import time
 import random
 import sys
+import csv
 import json
 try:
     from json.decoder import JSONDecodeError
@@ -21,20 +22,28 @@ class WrongDataTypeError(Exception):
 
 
 def load_data(filename):
-    try:
-        data = json.loads(open(filename, 'r').read())
-    except (FileNotFoundError, IOError):
-        raise
-    except (JSONDecodeError, ValueError):
-        raise
-    if not isinstance(data, list):
-        raise WrongDataTypeError("Data from %s is not a %s." % (filename, "list"))
+    if filename.endswith('.csv'):
+        data = []
+        csv_reader = csv.reader(open(filename, newline=''), delimiter=' ')
+        for row in csv_reader:
+            data.append(float(row[0]))
+    else:
+        try:
+            data = json.loads(open(filename, 'r').read())
+        except (FileNotFoundError, IOError):
+            raise
+        except (JSONDecodeError, ValueError):
+            raise
+        if not isinstance(data, list):
+            raise WrongDataTypeError("Data from %s is not a %s." % (filename, "list"))
     return data
 
 
 def draw_histogram(data, output_filename='histogram'):
-    plt.hist(g_numbs)
-    plt.title("Gaussian Histogram")
+    n, bins, patches = plt.hist(data)
+    print("Printing n, bins, and patches.")
+    print(n, bins, patches)
+    plt.title("Histogram")
     plt.xlabel("Value")
     plt.ylabel("Frequency")
     plt.grid(True)
@@ -49,6 +58,9 @@ if __name__ == "__main__":
     g_numbs = np.random.randn(1000)
     sample_data = [random.randint(0, 10) for i in range(1000)]
     data_filename = "example.data.txt"
-    data = load_data("mumbo.txt")
+    csv_filename = "test-data.csv"
+    bad_data = "mumbo.txt"
+    data = load_data(csv_filename)
+
     print(data)
-    draw_histogram(sample_data, 'myhisto')
+    draw_histogram(data, 'myhisto')
