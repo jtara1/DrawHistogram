@@ -22,9 +22,16 @@ class WrongDataTypeError(Exception):
 
 
 def load_data(filename):
+    """Load data from `.csv` file or plain-text file.
+    If `.csv` file given, all data should be in the first column and nothing
+    else in the `.csv` file.
+
+    :param filename: name of file to open and load data from
+    """
     if filename.endswith('.csv'):
         data = []
-        csv_reader = csv.reader(open(filename, newline=''), delimiter=' ')
+        csv_reader = csv.reader(open(filename, newline='', encoding='utf-8'),
+            delimiter=' ')
         for row in csv_reader:
             data.append(float(row[0]))
     else:
@@ -35,17 +42,25 @@ def load_data(filename):
         except (JSONDecodeError, ValueError):
             raise
         if not isinstance(data, list):
-            raise WrongDataTypeError("Data from %s is not a %s." % (filename, "list"))
+            raise WrongDataTypeError("Data from %s is not a %s." %
+                (filename, "list"))
     return data
 
 
 def draw_histogram(data, output_filename='histogram'):
-    n, bins, patches = plt.hist(data)
+    """Create a relative frequency histogram graph given a data set using
+    matplotlib.pyplot `hist(...)` function and save the graph as an image file.
+
+    :param data: list or ndarray containing floats or integers
+    :param output_filename: name of image file created
+    """
+    n, bins, patches = plt.hist(data,
+        weights=np.zeros_like(data) + 1. / len(data))
     print("Printing n, bins, and patches.")
     print(n, bins, patches)
     plt.title("Histogram")
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
+    plt.xlabel("Bins")
+    plt.ylabel("Relative Frequency")
     plt.grid(True)
 
     fig = plt.gcf()
@@ -57,8 +72,9 @@ if __name__ == "__main__":
     # tests
     g_numbs = np.random.randn(1000)
     sample_data = [random.randint(0, 10) for i in range(1000)]
+
     data_filename = "example.data.txt"
-    csv_filename = "test-data.csv"
+    csv_filename = "example.data.csv"
     bad_data = "mumbo.txt"
     data = load_data(csv_filename)
 
