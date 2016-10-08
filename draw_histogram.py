@@ -69,14 +69,24 @@ def draw_histogram(data, output_filename='histogram'):
 
 
 if __name__ == "__main__":
-    # tests
-    g_numbs = np.random.randn(1000)
-    sample_data = [random.randint(0, 10) for i in range(1000)]
+    output_image_file = "histogram"
 
-    data_filename = "example.data.txt"
-    csv_filename = "example.data.csv"
-    bad_data = "mumbo.txt"
-    data = load_data(csv_filename)
+    # command line arguments were passed
+    args = sys.argv
+    if len(args) > 1:
+        data_file = args[1]
+        if len(args) == 3:
+            output_image_file = args[2]
+        data = load_data(data_file)
+        print(data)
+        draw_histogram(data, output_image_file)
 
-    print(data)
-    draw_histogram(data, 'myhisto')
+    # no command line arguments passed
+    else:
+        data_filename = "example.data.txt"
+        csv_filename = "example.data.csv"
+        bad_data = "mumbo.txt"
+        
+        data = load_data(csv_filename)
+        print(data)
+        draw_histogram(data, output_image_file)
