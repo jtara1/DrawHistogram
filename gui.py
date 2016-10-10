@@ -28,26 +28,29 @@ class Gui(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
-        # self.pushButton.clicked.connect(self.getFileUi(self))
 
 
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(400, 300)
+        width, height = 650, 300
+        mWidth, mHeight = 400, 300
+        Dialog.setMinimumSize(mWidth, mHeight)
+        Dialog.resize(width, height)
         self.buttonBox = QtGui.QDialogButtonBox(Dialog)
-        self.buttonBox.setGeometry(QtCore.QRect(30, 240, 341, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(width - 390, height - 60, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
-        self.lineEdit = QtGui.QLineEdit(Dialog)
-        self.lineEdit.setGeometry(QtCore.QRect(50, 60, 300, 40))
-        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
         self.label = QtGui.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(50, 30, 300, 41))
+        self.label.setGeometry(QtCore.QRect(50, 30, width - 100, 41))
         self.label.setObjectName(_fromUtf8("label"))
+        self.lineEdit = QtGui.QLineEdit(Dialog)
+        self.lineEdit.setGeometry(QtCore.QRect(50, 60, width - 100, 40))
+        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 100, 300, 40))
+        self.pushButton.setGeometry(QtCore.QRect(50, 100, width - 100, 40))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.pushButton.clicked.connect(self.getFileUi)
 
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Dialog.accept)
@@ -55,16 +58,18 @@ class Gui(QtGui.QDialog):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
-        self.lineEdit.setText(_translate("Dialog", "./example.data.txt", None))
+    def retranslateUi(self, Dialog, filename="example.data.csv"):
+        Dialog.setWindowTitle(_translate("Dialog", "Create Histogram", None))
+        self.lineEdit.setText(_translate("Dialog", filename, None))
         self.label.setText(_translate("Dialog", "Data File:", None))
         self.pushButton.setText(_translate("Dialog", "Browse", None))
 
 
-    def getFileUi(self, Dialog):
-        filename = QFileDialog.getOpenFileName(Dialog, 'Open File', os.getcwd())
-        print(filename)
+    def getFileUi(self):
+        filename = QFileDialog.getOpenFileName(self, 'Open File', os.getcwd())
+        filename = os.path.relpath(str(filename))
+        self.retranslateUi(self, filename = filename)
+        return filename
 
 
 # # Create an PyQT4 application object.
