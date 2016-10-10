@@ -25,12 +25,16 @@ except AttributeError:
 
 
 class Gui(QtGui.QDialog):
+    """Inherit from QDialog class to provide GUI to browse for a local file"""
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
 
     def setupUi(self, Dialog):
+        """Create main application & all objects of QObject contained inside
+        of the application
+        """
         Dialog.setObjectName(_fromUtf8("Dialog"))
         width, height = 650, 300
         mWidth, mHeight = 400, 300
@@ -59,6 +63,7 @@ class Gui(QtGui.QDialog):
 
 
     def retranslateUi(self, Dialog, filename="example.data.csv"):
+        """Update UI with new values"""
         Dialog.setWindowTitle(_translate("Dialog", "Create Histogram", None))
         self.lineEdit.setText(_translate("Dialog", filename, None))
         self.label.setText(_translate("Dialog", "Data File:", None))
@@ -66,33 +71,21 @@ class Gui(QtGui.QDialog):
 
 
     def getFileUi(self):
+        """Brings up UI to browse and select a file then enters the relative
+        path of that file into the lineEdit field text box"""
         filename = QFileDialog.getOpenFileName(self, 'Open File', os.getcwd())
         filename = os.path.relpath(str(filename))
         self.retranslateUi(self, filename = filename)
         return filename
 
 
-# # Create an PyQT4 application object.
-# a = QApplication(sys.argv)
-#
-# # The QWidget widget is the base class of all user interface objects in PyQt4.
-# w = QWidget()
-#
-# # Set window size.
-# w.resize(320, 240)
-#
-# # Set window title
-# w.setWindowTitle("Hello World!")
-#
-# # Get filename using QFileDialog
-# filename = QFileDialog.getOpenFileName(w, 'Open File', os.getcwd())
-# print filename
-#
-# # print file contents
-# with open(filename, 'r') as f:
-#     print(f.read())
+    def getFilename(self):
+        """Return the absolute path of the text in lineEdit field"""
+        filename = str(self.lineEdit.text())
+        filename = os.path.abspath(filename)
+        # print(filename)
+        return filename
 
-# Show window
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
