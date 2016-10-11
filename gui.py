@@ -43,29 +43,31 @@ class Gui(QtGui.QDialog):
         mWidth, mHeight = 400, 300
         self.setMinimumSize(mWidth, mHeight)
         self.resize(width, height)
-        self.buttonBox = QtGui.QDialogButtonBox(self)
-        self.buttonBox.setGeometry(QtCore.QRect(width - 390, height - 60, 341, 32))
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+
+        self.closeButton = QtGui.QPushButton(self)
+        self.closeButton.setGeometry(QtCore.QRect(width - 150, 240, 100, 40))
+        self.closeButton.setObjectName(_fromUtf8("closeButton"))
+        self.closeButton.clicked.connect(self.accept)
+
         self.label = QtGui.QLabel(self)
         self.label.setGeometry(QtCore.QRect(50, 30, width - 100, 41))
         self.label.setObjectName(_fromUtf8("label"))
+
         self.lineEdit = QtGui.QLineEdit(self)
         self.lineEdit.setGeometry(QtCore.QRect(50, 60, width - 100, 40))
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
+
         self.browseButton = QtGui.QPushButton(self)
         self.browseButton.setGeometry(QtCore.QRect(50, 100, width - 100, 40))
         self.browseButton.setObjectName(_fromUtf8("browseButton"))
         self.browseButton.clicked.connect(self.getFileUi)
+
         self.createButton = QtGui.QPushButton(self)
         self.createButton.setGeometry(QtCore.QRect(50, 170, width - 100, 40))
         self.createButton.setObjectName(_fromUtf8("createButton"))
         self.createButton.clicked.connect(self.proceedToDrawHistogram)
 
         self.retranslateUi(self)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), self.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
 
 
@@ -76,6 +78,7 @@ class Gui(QtGui.QDialog):
         self.lineEdit.setText(_translate("Dialog", filename, None))
         self.browseButton.setText(_translate("Dialog", "Browse", None))
         self.createButton.setText(_translate("Dialog", "Create Histogram", None))
+        self.closeButton.setText(_translate("Dialog", "Close", None))
 
 
     def getFileUi(self):
