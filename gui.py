@@ -71,7 +71,7 @@ class Gui(QtGui.QDialog):
 
     def retranslateUi(self, Dialog, filename="example.data.csv"):
         """Update UI with new values"""
-        self.setWindowTitle(_translate("Dialog", "Create Histogram", None))
+        self.setWindowTitle(_translate("Dialog", "Draw Histogram", None))
         self.label.setText(_translate("Dialog", "Data File:", None))
         self.lineEdit.setText(_translate("Dialog", filename, None))
         self.browseButton.setText(_translate("Dialog", "Browse", None))
