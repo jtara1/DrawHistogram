@@ -1,3 +1,9 @@
+# @Author: j
+# @Date:   10-Oct-2016
+# @Email:  jtara@tuta.io
+# @Last modified by:   j
+# @Last modified time: 10-Oct-2016
+
 import matplotlib.pyplot as plt
 import numpy as np
 import time
@@ -21,51 +27,58 @@ class WrongDataTypeError(Exception):
         self.message = message
 
 
-def load_data(filename):
-    """Load data from `.csv` file or plain-text file.
-    If `.csv` file given, all data should be in the first column and nothing
-    else in the `.csv` file.
+class DrawHistogram:
+    """Save histogram as image given data"""
 
-    :param filename: name of file to open and load data from
-    """
-    if filename.endswith('.csv'):
-        data = []
-        csv_reader = csv.reader(open(filename, newline='', encoding='utf-8'),
-            delimiter=' ')
-        for row in csv_reader:
-            data.append(float(row[0]))
-    else:
-        try:
-            data = json.loads(open(filename, 'r').read())
-        except (FileNotFoundError, IOError):
-            raise
-        except (JSONDecodeError, ValueError):
-            raise
-        if not isinstance(data, list):
-            raise WrongDataTypeError("Data from %s is not a %s." %
-                (filename, "list"))
-    return data
+    def __init__(self, filename):
+        """Load the data"""
+        self.data = self.loadData(filename)
 
 
-def draw_histogram(data, output_filename='histogram'):
-    """Create a relative frequency histogram graph given a data set using
-    matplotlib.pyplot `hist(...)` function and save the graph as an image file.
+    def loadData(self, filename):
+        """Load data from `.csv` file or plain-text file.
+        If `.csv` file given, all data should be in the first column and nothing
+        else in the `.csv` file.
 
-    :param data: list or ndarray containing floats or integers
-    :param output_filename: name of image file created
-    """
-    n, bins, patches = plt.hist(data,
-        weights=np.zeros_like(data) + 1. / len(data))
-    print("Printing n, bins, and patches.")
-    print(n, bins, patches)
-    plt.title("Histogram")
-    plt.xlabel("Bins")
-    plt.ylabel("Relative Frequency")
-    plt.grid(True)
+        :param filename: name of file to open and load data from
+        """
+        if filename.endswith('.csv'):
+            data = []
+            csv_reader = csv.reader(open(filename, newline='', encoding='utf-8'),
+                delimiter=' ')
+            for row in csv_reader:
+                data.append(float(row[0]))
+        else:
+            try:
+                data = json.loads(open(filename, 'r').read())
+            except (FileNotFoundError, IOError):
+                raise
+            except (JSONDecodeError, ValueError):
+                raise
+            if not isinstance(data, list):
+                raise WrongDataTypeError("Data from %s is not a %s." %
+                    (filename, "list"))
+        return data
 
-    fig = plt.gcf()
-    fig.set_size_inches(12, 9)
-    fig.savefig(output_filename, dpi=80)
+
+    def drawHistogram(self, output_filename='histogram'):
+        """Create a relative frequency histogram graph given a data set using
+        matplotlib.pyplot `hist(...)` function and save the graph as an image file.
+
+        :param output_filename: name of image file created
+        """
+        n, bins, patches = plt.hist(self.data,
+            weights=np.zeros_like(self.data) + 1. / len(self.data))
+        print("Printing n, bins, and patches.")
+        print(n, bins, patches)
+        plt.title("Histogram")
+        plt.xlabel("Bins")
+        plt.ylabel("Relative Frequency")
+        plt.grid(True)
+
+        fig = plt.gcf()
+        fig.set_size_inches(12, 9)
+        fig.savefig(output_filename, dpi=80)
 
 
 if __name__ == "__main__":
@@ -86,7 +99,7 @@ if __name__ == "__main__":
         data_filename = "example.data.txt"
         csv_filename = "example.data.csv"
         bad_data = "mumbo.txt"
-        
+
         data = load_data(csv_filename)
         print(data)
         draw_histogram(data, output_image_file)
