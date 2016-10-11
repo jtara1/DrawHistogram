@@ -12,8 +12,18 @@ Python 3
 
 * matplotlib
 * numpy
+* PyQt4
 
 ## Usage
+
+#### GUI
+
+Start GUI by running through terminal then browse for a file to load data from
+and click create histogram button.
+
+    python main.py
+
+![pic of gui](http://i.imgur.com/3taAoV1.png)
 
 #### Command Line
 
