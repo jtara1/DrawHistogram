@@ -8,7 +8,6 @@ import sys, os
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import *
 from PyQt4.QtCore import pyqtSignal
-# from PyQt4.QtCore import QEventLoop
 
 from draw_histogram import DrawHistogram
 
@@ -94,7 +93,6 @@ class Gui(QtGui.QDialog):
         """Return the absolute path of the text in lineEdit field"""
         filename = str(self.lineEdit.text())
         filename = os.path.abspath(filename)
-        # print(filename)
         return filename
 
 
@@ -103,19 +101,9 @@ class Gui(QtGui.QDialog):
         hist.drawHistogram()
 
 
-    # @staticmethod
-    # def getFilename2(self, parent=None):
-    #     gui = Gui(parent)
-    #     result = gui.exec_()
-    #     filename = self.getFilename()
-    #     return (filename, result == QDialog.Accepted)
-
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     gui = Gui()
     gui.show()
-    # filename, ok = Gui.getFilename2(app)
-    # print(filename, ok)
-
     sys.exit(app.exec_())
